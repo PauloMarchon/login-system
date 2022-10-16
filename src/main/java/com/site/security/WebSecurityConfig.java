@@ -40,13 +40,13 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain (HttpSecurity http) throws Exception{
         http
-                .csrf().and().cors().disable()
+                .csrf(csrf -> csrf.disable())
                 .formLogin(withDefaults())
                 .authorizeHttpRequests((authorize) -> authorize
-                        .mvcMatchers("/api/v1/user/register" , "/api/v1/user/register").permitAll()
-                        .mvcMatchers("/api/v1/user/delete").hasRole("ADMIN")
-                        .anyRequest().authenticated());
-
+                        .antMatchers("/h2-console/**").permitAll()
+                        .antMatchers("/api/v1/user/register").permitAll()
+                        .anyRequest().authenticated())
+               .formLogin(withDefaults());
         return http.build();
     }
 
@@ -61,12 +61,12 @@ public class WebSecurityConfig {
     }
 */
 
-    /*
+
     @Bean
     AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
-*/
+
     @Bean
     public static PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();

@@ -13,25 +13,29 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
+
+    private final RoleRepository roleRepository;
+    private final ERole DEFAULT_USER_ROLE = ERole.ROLE_USER;
     private UserMapper userMapper = new UserMapper();
 
+
     @Override
-    public UserDto saveUser(UserDto userDto) {
+    public User saveUser(UserDto userDto) {
         User user = new User();
         user.setUsername(userDto.getUsername());
         user.setEmail(userDto.getEmail());
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
 
-        ERole role = ERole.ROLE_USER;
+        //ATRIBUIR A ROLE DEFAULT (USER) AO NOVO USUARIO REGISTRADO --------------------------DESACOPLAR CRICAO DA ROLE?\/
+        Role role = new Role();
+        role.setName(DEFAULT_USER_ROLE);
+        roleRepository.save(role);
+
         user.setRoles(role);
-        //user.setRoles(Collections.singletonList(role)); //ATRIBUIR ROLE_USER AO SET DE ROLES DO USUARIO NA CRIACAO
-
-
         userRepository.save(user);
 
-        return userMapper.convertToDto(user);
+        return user;
 
     }
 
@@ -69,4 +73,6 @@ public class UserServiceImpl implements UserService {
     public void deleteUser(UUID id) {
         userRepository.deleteById(id);
     }
+
+
 }

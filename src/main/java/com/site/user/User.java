@@ -7,6 +7,8 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.UUID;
 
 @Getter
@@ -14,6 +16,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Table(name = "table_user")
 public class User {
 
     @Id
@@ -30,10 +33,12 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @Enumerated(EnumType.STRING)
-    private ERole roles;
 
-    public User(String username, String email, String password, ERole roles) {
+    @ManyToOne
+    @JoinColumn(name = "roles_id")
+    private Role roles;
+
+    public User(String username, String email, String password, Role roles) {
         this.username = username;
         this.email = email;
         this.password = password;

@@ -12,7 +12,7 @@ import java.util.UUID;
 
 public interface UserService {
 
-     UserDto saveUser(UserDto userDto);
+     User saveUser(UserDto userDto);
 
      User findByEmail(String email);
 

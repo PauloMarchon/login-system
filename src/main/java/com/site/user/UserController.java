@@ -17,21 +17,20 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
-    @PostMapping("register")
-    public @ResponseBody ResponseEntity<UserDto> registerUser(@RequestBody UserDto userDto){
-        return new ResponseEntity<UserDto>(
-                userService.saveUser(userDto),
-                HttpStatus.CREATED);
+
+    @PostMapping("/register")
+    public ResponseEntity<User> registerUser(@RequestBody UserDto userDto){
+        return new ResponseEntity<User>(userService.saveUser(userDto), HttpStatus.CREATED);
     }
 
-    @DeleteMapping("delete/{id}")
+    @DeleteMapping("/delete/{id}")
     public @ResponseBody ResponseEntity<?> delete(@PathVariable UUID id){
         userService.deleteUser(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @GetMapping("/all")
-    public @ResponseBody ResponseEntity<List<UserDto>> findAllUsers(){
+    public ResponseEntity<List<UserDto>> findAllUsers(){
         userService.findAllUsers();
         return new ResponseEntity<List<UserDto>>(
                 userService.findAllUsers(),
